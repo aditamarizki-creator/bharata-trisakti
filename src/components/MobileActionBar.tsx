@@ -4,8 +4,10 @@ import { ShoppingBag, MessageCircle } from "lucide-react";
 import { useCart, cartSelectors } from "@/lib/cart-store";
 import { formatRupiah } from "@/lib/format";
 import { buildGeneralInquiry, waUrl } from "@/lib/wa";
+import { useSettings } from "@/lib/settings-context";
 
 export function MobileActionBar() {
+  const { waNumber } = useSettings();
   const count = useCart(cartSelectors.count);
   const subtotal = useCart(cartSelectors.subtotal);
   const hydrated = useCart((s) => s.hasHydrated);
@@ -20,7 +22,7 @@ export function MobileActionBar() {
     >
       <div className="glass-strong rounded-full p-1.5 flex items-center gap-1.5 shadow-[0_-8px_28px_rgba(15,41,46,0.18)]">
         <a
-          href={waUrl(buildGeneralInquiry())}
+          href={waUrl(buildGeneralInquiry(), waNumber)}
           target="_blank"
           rel="noopener noreferrer"
           className="shrink-0 grid place-items-center w-12 h-12 rounded-full bg-[var(--color-whatsapp)] text-white shadow-[0_4px_12px_rgba(37,211,102,0.35)] active:scale-95 transition"

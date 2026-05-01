@@ -19,6 +19,7 @@ import { ProductImage } from "@/components/product/ProductImage";
 import { useCart, cartSelectors } from "@/lib/cart-store";
 import { formatRupiah, formatPhoneIndonesia } from "@/lib/format";
 import { buildOrderMessage, openWhatsApp, buildGeneralInquiry, waUrl } from "@/lib/wa";
+import { useSettings } from "@/lib/settings-context";
 import { cn } from "@/lib/cn";
 
 const KURIR: { id: OrderForm["kurir"]; desc: string }[] = [
@@ -40,6 +41,7 @@ const initialForm: OrderForm = {
 
 export default function CheckoutPage() {
   const router = useRouter();
+  const { waNumber } = useSettings();
   const items = useCart((s) => s.items);
   const subtotal = useCart(cartSelectors.subtotal);
   const clearCart = useCart((s) => s.clearCart);
@@ -84,7 +86,7 @@ export default function CheckoutPage() {
     }
     setSubmitting(true);
     const msg = buildOrderMessage(items, form);
-    openWhatsApp(msg);
+    openWhatsApp(msg, waNumber);
     setTimeout(() => {
       clearCart();
       toast.success("Pesanan terkirim ke admin via WhatsApp 🎉");

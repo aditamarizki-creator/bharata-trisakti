@@ -1,12 +1,16 @@
+"use client";
+
 import Link from "next/link";
 import { Star, Truck, ShieldCheck, ArrowRight } from "lucide-react";
 import { LinkButton } from "@/components/ui/Button";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { Badge } from "@/components/ui/Badge";
 import { buildGeneralInquiry, waUrl } from "@/lib/wa";
+import { useSettings } from "@/lib/settings-context";
 import { HeroIllustration } from "./HeroIllustration";
 
 export function Hero() {
+  const { waNumber } = useSettings();
   return (
     <section className="relative px-4 pt-6 sm:pt-10 md:pt-16 pb-10 md:pb-12">
       <div className="max-w-7xl mx-auto grid lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-12 items-center">
@@ -37,7 +41,7 @@ export function Hero() {
               Lihat Katalog
             </LinkButton>
             <LinkButton
-              href={waUrl(buildGeneralInquiry())}
+              href={waUrl(buildGeneralInquiry(), waNumber)}
               target="_blank"
               rel="noopener noreferrer"
               variant="whatsapp"

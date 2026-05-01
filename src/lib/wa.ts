@@ -1,6 +1,7 @@
 import type { CartItem, OrderForm } from "@/types/product";
 import { formatRupiah } from "./format";
 
+// Default fallback — di runtime di-override oleh settings.waNumber via context
 export const WA_ADMIN = "6285702403940";
 
 export function buildOrderMessage(items: CartItem[], form: OrderForm): string {

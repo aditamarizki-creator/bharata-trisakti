@@ -1,9 +1,13 @@
+"use client";
+
 import { ArrowRight, MessageCircle } from "lucide-react";
 import { LinkButton } from "@/components/ui/Button";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { buildGeneralInquiry, waUrl } from "@/lib/wa";
+import { useSettings } from "@/lib/settings-context";
 
 export function FinalCTA() {
+  const { waNumber } = useSettings();
   return (
     <section className="px-4 py-14">
       <GlassCard
@@ -40,7 +44,7 @@ export function FinalCTA() {
               Mulai Pesan Sekarang
             </LinkButton>
             <LinkButton
-              href={waUrl(buildGeneralInquiry())}
+              href={waUrl(buildGeneralInquiry(), waNumber)}
               target="_blank"
               rel="noopener noreferrer"
               variant="whatsapp"

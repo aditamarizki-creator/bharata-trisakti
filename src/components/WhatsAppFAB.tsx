@@ -2,11 +2,13 @@
 
 import { MessageCircle } from "lucide-react";
 import { buildGeneralInquiry, waUrl } from "@/lib/wa";
+import { useSettings } from "@/lib/settings-context";
 
 export function WhatsAppFAB() {
+  const { waNumber } = useSettings();
   return (
     <a
-      href={waUrl(buildGeneralInquiry())}
+      href={waUrl(buildGeneralInquiry(), waNumber)}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat WhatsApp"

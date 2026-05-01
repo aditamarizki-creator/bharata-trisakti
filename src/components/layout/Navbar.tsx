@@ -8,6 +8,7 @@ import { Logo } from "./Logo";
 import { Button, LinkButton } from "@/components/ui/Button";
 import { useCart, cartSelectors } from "@/lib/cart-store";
 import { buildGeneralInquiry, waUrl } from "@/lib/wa";
+import { useSettings } from "@/lib/settings-context";
 import { cn } from "@/lib/cn";
 
 const NAV = [
@@ -18,6 +19,7 @@ const NAV = [
 
 export function Navbar() {
   const pathname = usePathname();
+  const { waNumber } = useSettings();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const count = useCart(cartSelectors.count);
@@ -84,7 +86,7 @@ export function Navbar() {
           </button>
 
           <LinkButton
-            href={waUrl(buildGeneralInquiry())}
+            href={waUrl(buildGeneralInquiry(), waNumber)}
             target="_blank"
             rel="noopener noreferrer"
             variant="whatsapp"
@@ -134,7 +136,7 @@ export function Navbar() {
               size="md"
               className="w-full"
               onClick={() => {
-                window.open(waUrl(buildGeneralInquiry()), "_blank");
+                window.open(waUrl(buildGeneralInquiry(), waNumber), "_blank");
               }}
             >
               Pesan via WhatsApp

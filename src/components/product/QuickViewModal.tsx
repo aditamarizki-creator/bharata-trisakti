@@ -13,6 +13,7 @@ import { PriceTag } from "./PriceTag";
 import { ProductImage } from "./ProductImage";
 import { useCart } from "@/lib/cart-store";
 import { buildProductInquiry, openWhatsApp } from "@/lib/wa";
+import { useSettings } from "@/lib/settings-context";
 import { cn } from "@/lib/cn";
 
 type Props = {
@@ -32,6 +33,7 @@ export function QuickViewModal({ product, onClose }: Props) {
   const [qty, setQty] = useState(1);
   const addItem = useCart((s) => s.addItem);
   const openCart = useCart((s) => s.openCart);
+  const { waNumber } = useSettings();
 
   useEffect(() => {
     if (product) {
@@ -63,7 +65,7 @@ export function QuickViewModal({ product, onClose }: Props) {
       size: variant.size,
       price: variant.price,
       qty,
-      image: product.image,
+      image: product.imageUrl || product.image,
     });
     toast.success(`Ditambahkan: ${product.brand} ${product.name} (${variant.size}) x${qty}`);
     onClose();
@@ -73,6 +75,7 @@ export function QuickViewModal({ product, onClose }: Props) {
   const handleWA = () => {
     openWhatsApp(
       buildProductInquiry(`${product.brand} ${product.name} - ${variant.size} x${qty}`),
+      waNumber,
     );
   };
 
@@ -113,12 +116,21 @@ export function QuickViewModal({ product, onClose }: Props) {
 
               <div className="grid md:grid-cols-2">
                 <div className="relative aspect-square md:aspect-auto md:min-h-[480px] bg-[var(--color-accent-soft)]/30">
-                  <ProductImage
-                    brand={product.brand}
-                    name={product.name}
-                    seed={product.id}
-                    rounded="rounded-none"
-                  />
+                  {product.imageUrl ? (
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img
+                      src={product.imageUrl}
+                      alt={product.name}
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                  ) : (
+                    <ProductImage
+                      brand={product.brand}
+                      name={product.name}
+                      seed={product.id}
+                      rounded="rounded-none"
+                    />
+                  )}
                   <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
                     {product.badge && (
                       <Badge variant="gold">{product.badge}</Badge>

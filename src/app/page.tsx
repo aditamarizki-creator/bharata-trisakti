@@ -6,8 +6,16 @@ import { HowToOrder } from "@/components/home/HowToOrder";
 import { Testimonials } from "@/components/home/Testimonials";
 import { FinalCTA } from "@/components/home/FinalCTA";
 import { Reveal } from "@/components/Reveal";
+import { getProducts } from "@/lib/storage";
 
-export default function HomePage() {
+export const revalidate = 60;
+
+export default async function HomePage() {
+  const all = await getProducts();
+  const featured = all
+    .filter((p) => p.featured && p.inStock !== false)
+    .slice(0, 8);
+
   return (
     <>
       <Hero />
@@ -18,7 +26,7 @@ export default function HomePage() {
         <ValueProps />
       </Reveal>
       <Reveal>
-        <FeaturedProducts />
+        <FeaturedProducts products={featured} />
       </Reveal>
       <Reveal>
         <HowToOrder />

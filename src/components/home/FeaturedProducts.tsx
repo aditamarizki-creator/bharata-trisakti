@@ -6,9 +6,10 @@ import { ArrowRight } from "lucide-react";
 import type { Product } from "@/types/product";
 import { ProductCard } from "@/components/product/ProductCard";
 import { QuickViewModal } from "@/components/product/QuickViewModal";
-import { FEATURED_PRODUCTS } from "@/lib/products";
 
-export function FeaturedProducts() {
+type Props = { products: Product[] };
+
+export function FeaturedProducts({ products }: Props) {
   const [active, setActive] = useState<Product | null>(null);
 
   return (
@@ -32,7 +33,7 @@ export function FeaturedProducts() {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
-          {FEATURED_PRODUCTS.slice(0, 8).map((p) => (
+          {products.map((p) => (
             <ProductCard key={p.id} product={p} onQuickView={setActive} />
           ))}
         </div>

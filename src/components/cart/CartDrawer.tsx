@@ -10,8 +10,10 @@ import { Button, LinkButton } from "@/components/ui/Button";
 import { QtyStepper } from "@/components/ui/QtyStepper";
 import { ProductImage } from "@/components/product/ProductImage";
 import { buildCartInquiry, openWhatsApp } from "@/lib/wa";
+import { useSettings } from "@/lib/settings-context";
 
 export function CartDrawer() {
+  const { waNumber } = useSettings();
   const isOpen = useCart((s) => s.isOpen);
   const closeCart = useCart((s) => s.closeCart);
   const items = useCart((s) => s.items);
@@ -167,7 +169,7 @@ export function CartDrawer() {
                   variant="whatsapp"
                   size="md"
                   className="w-full"
-                  onClick={() => openWhatsApp(buildCartInquiry(items))}
+                  onClick={() => openWhatsApp(buildCartInquiry(items), waNumber)}
                   iconLeft={<MessageCircle className="w-4 h-4" />}
                 >
                   Pesan Langsung via WhatsApp

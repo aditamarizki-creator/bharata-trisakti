@@ -28,8 +28,12 @@ export type Product = {
   description: string;
   variants: Variant[];
   image: string;
+  imageUrl?: string; // override foto upload (replaces SVG)
   featured?: boolean;
+  inStock?: boolean; // default true; false = stok habis
   badge?: "Terlaris" | "Baru" | "Premium" | "Hemat";
+  createdAt?: number;
+  updatedAt?: number;
 };
 
 export type CartItem = {
@@ -51,4 +55,30 @@ export type OrderForm = {
   kodepos: string;
   kurir: "JNE Reguler" | "POS Indonesia" | "J&T Cargo";
   catatan: string;
+};
+
+export type Settings = {
+  waNumber: string; // ex: "6285702403940" (no +)
+  storeName: string;
+  storeAddress: string;
+  storeEmail: string;
+  storeHours: string;
+  promoBanner: {
+    enabled: boolean;
+    text: string;
+    href?: string;
+  };
+};
+
+export const DEFAULT_SETTINGS: Settings = {
+  waNumber: "6285702403940",
+  storeName: "Bharata Trisakti",
+  storeAddress: "Indonesia (kirim ke seluruh Indonesia)",
+  storeEmail: "halo@bharatatrisakti.id",
+  storeHours: "Senin–Sabtu, 08.00–17.00 WIB",
+  promoBanner: {
+    enabled: false,
+    text: "🎉 Promo terbatas — chat WA untuk info lengkap",
+    href: "",
+  },
 };
