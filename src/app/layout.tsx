@@ -5,7 +5,6 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { WhatsAppFAB } from "@/components/WhatsAppFAB";
 import { CartDrawer } from "@/components/cart/CartDrawer";
-import { LiveActivity } from "@/components/LiveActivity";
 import { MobileActionBar } from "@/components/MobileActionBar";
 import { PromoBanner } from "@/components/PromoBanner";
 import { SettingsProvider } from "@/lib/settings-context";
@@ -27,7 +26,7 @@ const jakarta = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   title: "Bharata Trisakti — Pakan Premium Koi & Ikan Hias",
   description:
-    "Distributor resmi pakan ikan koi & ikan hias: Hiro, Sankoi, STP KAE, Kohaku, PIP, Matahari Sakti, CP Petindo. Original 100%, kirim ke seluruh Indonesia.",
+    "Distributor resmi pakan ikan koi & ikan hias: Hiro, Sankoi, STP KAE, Kohaku, PIP, Matahari Sakti, CP Petindo. Kirim ke seluruh Indonesia.",
   keywords: [
     "pakan koi",
     "pakan ikan hias",
@@ -61,7 +60,6 @@ export default async function RootLayout({
           </div>
           <CartDrawer />
           <WhatsAppFAB />
-          <LiveActivity />
           <MobileActionBar />
         </SettingsProvider>
         <Toaster

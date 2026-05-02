@@ -1,14 +1,15 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg: #f5f2ec;
-  --color-surface: #faf8f3;
-  --color-ink: #1f2a2e;
-  --color-ink-soft: #5a6770;
-  --color-accent: #0e7c86;
-  --color-accent-deep: #075963;
-  --color-accent-soft: #b8e0dd;
-  --color-gold: #c9a961;
+  /* Palette diambil dari logo Bharata Trisakti: orange (B kuning) + dark warm + cream */
+  --color-bg: #faf6ef;
+  --color-surface: #fffaf0;
+  --color-ink: #2a2622;
+  --color-ink-soft: #6b6258;
+  --color-accent: #f2a41c;
+  --color-accent-deep: #d6850a;
+  --color-accent-soft: #ffe7b3;
+  --color-gold: #f2a41c;
   --color-success: #2e8b57;
   --color-whatsapp: #25d366;
   --color-whatsapp-deep: #128c7e;
@@ -17,8 +18,10 @@
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
 
   --radius-glass: 1.25rem;
-  --shadow-glass: 0 8px 32px rgba(15, 41, 46, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.7);
-  --shadow-glass-lg: 0 20px 60px rgba(15, 41, 46, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  --shadow-glass: 0 8px 32px rgba(42, 38, 34, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  --shadow-glass-lg: 0 20px 60px rgba(42, 38, 34, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  --shadow-card: 0 6px 20px rgba(42, 38, 34, 0.06), 0 2px 6px rgba(42, 38, 34, 0.04);
+  --shadow-card-hover: 0 16px 40px rgba(214, 133, 10, 0.18), 0 4px 12px rgba(42, 38, 34, 0.08);
 }
 
 html,
@@ -51,7 +54,7 @@ body::before {
   height: 720px;
   top: -260px;
   left: -200px;
-  background: radial-gradient(closest-side, rgba(14, 124, 134, 0.45), transparent 70%);
+  background: radial-gradient(closest-side, rgba(242, 164, 28, 0.30), transparent 70%);
 }
 
 body::after {
@@ -59,7 +62,7 @@ body::after {
   height: 640px;
   bottom: -240px;
   right: -180px;
-  background: radial-gradient(closest-side, rgba(184, 224, 221, 0.7), transparent 70%);
+  background: radial-gradient(closest-side, rgba(255, 231, 179, 0.65), transparent 70%);
 }
 
 @layer utilities {
@@ -88,10 +91,24 @@ body::after {
   }
 
   .glass-tint {
-    background: linear-gradient(135deg, rgba(184, 224, 221, 0.55), rgba(255, 255, 255, 0.45));
+    background: linear-gradient(135deg, rgba(255, 231, 179, 0.6), rgba(255, 255, 255, 0.45));
     backdrop-filter: blur(14px) saturate(160%);
     -webkit-backdrop-filter: blur(14px) saturate(160%);
     border: 1px solid rgba(255, 255, 255, 0.6);
+  }
+
+  .product-card {
+    background: #ffffff;
+    border: 1px solid rgba(42, 38, 34, 0.06);
+    box-shadow: var(--shadow-card);
+    transition: transform 250ms cubic-bezier(0.2, 0.7, 0.2, 1),
+      box-shadow 250ms cubic-bezier(0.2, 0.7, 0.2, 1),
+      border-color 250ms ease;
+  }
+  .product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card-hover);
+    border-color: rgba(242, 164, 28, 0.35);
   }
 
   .text-balance {

@@ -1,44 +1,8 @@
-import type { CartItem, OrderForm } from "@/types/product";
+import type { CartItem } from "@/types/product";
 import { formatRupiah } from "./format";
 
 // Default fallback — di runtime di-override oleh settings.waNumber via context
 export const WA_ADMIN = "6285702403940";
-
-export function buildOrderMessage(items: CartItem[], form: OrderForm): string {
-  const lines: string[] = [];
-  lines.push("Halo *Bharata Trisakti*, saya ingin pesan:");
-  lines.push("");
-
-  let subtotal = 0;
-  items.forEach((item, i) => {
-    const lineTotal = item.price * item.qty;
-    subtotal += lineTotal;
-    lines.push(
-      `${i + 1}. ${item.brand} ${item.name} - ${item.size} x${item.qty} = ${formatRupiah(lineTotal)}`,
-    );
-  });
-
-  lines.push("");
-  lines.push(`*Subtotal:* ${formatRupiah(subtotal)}`);
-  lines.push(`*Kurir pilihan:* ${form.kurir}`);
-  lines.push("");
-  lines.push("*Data Pengiriman:*");
-  lines.push(`Nama: ${form.nama}`);
-  lines.push(`HP: ${form.hp}`);
-  if (form.email) lines.push(`Email: ${form.email}`);
-  lines.push(
-    `Alamat: ${form.alamat}, ${form.kota}${form.kodepos ? ` ${form.kodepos}` : ""}`,
-  );
-  if (form.catatan) {
-    lines.push("");
-    lines.push(`Catatan: ${form.catatan}`);
-  }
-
-  lines.push("");
-  lines.push("Mohon konfirmasi ongkir & ketersediaan stok. Terima kasih 🙏");
-
-  return lines.join("\n");
-}
 
 export function buildCartInquiry(items: CartItem[]): string {
   if (items.length === 0) {

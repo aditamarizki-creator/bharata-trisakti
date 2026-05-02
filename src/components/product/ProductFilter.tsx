@@ -30,15 +30,14 @@ const PURPOSES: { id: Purpose; label: string }[] = [
   { id: "protein", label: "Hi-Protein" },
 ];
 
-const SIZES: Size[] = ["1kg", "5kg", "10kg", "20kg"];
-
 type Props = {
   filters: Filters;
   onChange: (f: Filters) => void;
   total: number;
+  availableSizes: Size[];
 };
 
-export function ProductFilter({ filters, onChange, total }: Props) {
+export function ProductFilter({ filters, onChange, total, availableSizes }: Props) {
   const toggleBrand = (b: Brand) =>
     onChange({
       ...filters,
@@ -169,31 +168,33 @@ export function ProductFilter({ filters, onChange, total }: Props) {
         </div>
       </div>
 
-      <div>
-        <p className="text-xs uppercase tracking-wider text-[var(--color-ink-soft)] mb-2">
-          Ukuran tersedia
-        </p>
-        <div className="grid grid-cols-4 gap-1.5">
-          {SIZES.map((s) => {
-            const active = filters.sizes.includes(s);
-            return (
-              <button
-                key={s}
-                type="button"
-                onClick={() => toggleSize(s)}
-                className={cn(
-                  "py-1.5 rounded-lg text-xs font-semibold border transition",
-                  active
-                    ? "bg-[var(--color-accent)] text-white border-[var(--color-accent)]"
-                    : "bg-white/60 border-white/80 text-[var(--color-ink)] hover:bg-white/90",
-                )}
-              >
-                {s}
-              </button>
-            );
-          })}
+      {availableSizes.length > 0 && (
+        <div>
+          <p className="text-xs uppercase tracking-wider text-[var(--color-ink-soft)] mb-2">
+            Ukuran tersedia
+          </p>
+          <div className="flex flex-wrap gap-1.5">
+            {availableSizes.map((s) => {
+              const active = filters.sizes.includes(s);
+              return (
+                <button
+                  key={s}
+                  type="button"
+                  onClick={() => toggleSize(s)}
+                  className={cn(
+                    "px-2.5 py-1.5 rounded-lg text-xs font-semibold border transition",
+                    active
+                      ? "bg-[var(--color-accent)] text-white border-[var(--color-accent)]"
+                      : "bg-white/60 border-white/80 text-[var(--color-ink)] hover:bg-white/90",
+                  )}
+                >
+                  {s}
+                </button>
+              );
+            })}
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="flex items-center justify-between pt-3 border-t border-white/60">
         <Badge variant="neutral">{total} produk</Badge>

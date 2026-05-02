@@ -29,7 +29,7 @@ const PURPOSE_LABEL: Record<string, string> = {
 };
 
 export function QuickViewModal({ product, onClose }: Props) {
-  const [size, setSize] = useState<Size>("1kg");
+  const [size, setSize] = useState<Size>("");
   const [qty, setQty] = useState(1);
   const addItem = useCart((s) => s.addItem);
   const openCart = useCart((s) => s.openCart);
@@ -37,7 +37,7 @@ export function QuickViewModal({ product, onClose }: Props) {
 
   useEffect(() => {
     if (product) {
-      setSize(product.variants[0].size);
+      setSize(product.variants[0]?.size ?? "");
       setQty(1);
     }
   }, [product]);
@@ -169,6 +169,13 @@ export function QuickViewModal({ product, onClose }: Props) {
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                       {product.variants.map((v) => {
                         const active = v.size === size;
+                        const unitLabel = v.unit
+                          ? v.unit === "kg"
+                            ? parseFloat(String(v.amount ?? 0)) <= 5
+                              ? "Repack"
+                              : "Sak"
+                            : v.unit.charAt(0).toUpperCase() + v.unit.slice(1)
+                          : "Kemasan";
                         return (
                           <button
                             key={v.size}
@@ -177,14 +184,12 @@ export function QuickViewModal({ product, onClose }: Props) {
                             className={cn(
                               "px-3 py-2.5 rounded-xl border text-sm transition text-left",
                               active
-                                ? "bg-[var(--color-accent)] text-white border-[var(--color-accent)] shadow-[0_4px_12px_rgba(14,124,134,0.3)]"
+                                ? "bg-[var(--color-accent)] text-white border-[var(--color-accent)] shadow-[0_4px_12px_rgba(242,164,28,0.35)]"
                                 : "bg-white/70 border-white/80 hover:border-[var(--color-accent-soft)] text-[var(--color-ink)]",
                             )}
                           >
                             <span className="block text-xs opacity-80">
-                              {v.size.includes("kg") && parseInt(v.size) <= 5
-                                ? "Repack"
-                                : "Sak"}
+                              {unitLabel}
                             </span>
                             <span className="block font-bold">{v.size}</span>
                           </button>

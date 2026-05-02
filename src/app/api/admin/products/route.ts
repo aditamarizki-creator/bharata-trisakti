@@ -36,12 +36,7 @@ export async function POST(req: Request) {
       variants:
         body.variants && body.variants.length > 0
           ? body.variants
-          : [
-              { size: "1kg", price: 0 },
-              { size: "5kg", price: 0 },
-              { size: "10kg", price: 0 },
-              { size: "20kg", price: 0 },
-            ],
+          : [{ size: "1kg", price: 0, amount: 1, unit: "kg" }],
       image: body.image ?? "",
       imageUrl: body.imageUrl ?? "",
       featured: !!body.featured,

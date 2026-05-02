@@ -1,13 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { Eye, Plus } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import type { Product } from "@/types/product";
-import { GlassCard } from "@/components/ui/GlassCard";
 import { Badge } from "@/components/ui/Badge";
-import { PriceTag } from "./PriceTag";
 import { ProductImage } from "./ProductImage";
 import { getMinPrice } from "@/lib/products";
+import { formatRupiah } from "@/lib/format";
 import { cn } from "@/lib/cn";
 
 type Props = {
@@ -26,10 +25,11 @@ const badgeVariant: Record<NonNullable<Product["badge"]>, "accent" | "gold" | "s
 export function ProductCard({ product, onQuickView, className }: Props) {
   const min = getMinPrice(product);
   const outOfStock = product.inStock === false;
+
   return (
-    <GlassCard
+    <article
       className={cn(
-        "group p-3 flex flex-col gap-3 hover:translate-y-[-3px] transition-all",
+        "product-card group rounded-3xl overflow-hidden flex flex-col",
         outOfStock && "opacity-70",
         className,
       )}
@@ -38,11 +38,11 @@ export function ProductCard({ product, onQuickView, className }: Props) {
         type="button"
         onClick={() => !outOfStock && onQuickView(product)}
         disabled={outOfStock}
+        aria-label={`Lihat detail ${product.name}`}
         className={cn(
-          "relative aspect-square w-full rounded-2xl overflow-hidden bg-[var(--color-accent-soft)]/30",
+          "relative aspect-square w-full overflow-hidden bg-[var(--color-accent-soft)]/30",
           outOfStock && "cursor-not-allowed",
         )}
-        aria-label={`Lihat detail ${product.name}`}
       >
         {product.imageUrl ? (
           <Image
@@ -51,7 +51,7 @@ export function ProductCard({ product, onQuickView, className }: Props) {
             fill
             sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
             className={cn(
-              "object-cover group-hover:scale-105 transition-transform duration-500",
+              "object-cover transition-transform duration-500 group-hover:scale-[1.06]",
               outOfStock && "grayscale",
             )}
           />
@@ -62,60 +62,71 @@ export function ProductCard({ product, onQuickView, className }: Props) {
             seed={product.id}
             rounded="rounded-none"
             className={cn(
-              "group-hover:scale-105 transition-transform duration-500",
+              "transition-transform duration-500 group-hover:scale-[1.06]",
               outOfStock && "grayscale",
             )}
           />
         )}
+
+        {/* gradient bottom for badge legibility */}
+        <span
+          aria-hidden
+          className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[rgba(42,38,34,0.35)] to-transparent pointer-events-none"
+        />
+
+        {/* top-left brand chip */}
+        <span className="absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-white/85 backdrop-blur px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[var(--color-ink)] shadow-sm">
+          {product.brand}
+        </span>
+
+        {/* top-right badge */}
         {product.badge && !outOfStock && (
-          <span className="absolute top-2 left-2">
+          <span className="absolute top-3 right-3">
             <Badge variant={badgeVariant[product.badge]}>{product.badge}</Badge>
           </span>
         )}
+
         {outOfStock && (
           <span className="absolute inset-0 grid place-items-center bg-[var(--color-ink)]/30 backdrop-blur-[2px]">
-            <span className="glass-strong px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider">
+            <span className="bg-white/90 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider text-[var(--color-ink)]">
               Stok Habis
             </span>
           </span>
         )}
-        {!outOfStock && (
-          <span className="absolute bottom-2 right-2 inline-flex items-center gap-1 glass-strong rounded-full px-2.5 py-1 text-xs font-semibold opacity-0 group-hover:opacity-100 transition">
-            <Eye className="w-3.5 h-3.5" />
-            Detail
-          </span>
-        )}
       </button>
 
-      <div className="px-1 flex flex-col gap-1.5 flex-1">
-        <Badge variant="accent" className="self-start">
-          {product.brand}
-        </Badge>
-        <h3 className="font-display font-bold text-[var(--color-ink)] text-[15px] leading-tight line-clamp-2">
+      <div className="p-3 sm:p-4 flex flex-col gap-1.5 flex-1">
+        <h3 className="font-display font-bold text-[var(--color-ink)] text-[15px] sm:text-base leading-tight line-clamp-2">
           {product.name}
         </h3>
-        <p className="text-xs text-[var(--color-ink-soft)] line-clamp-2 mt-0.5">
+        <p className="text-xs text-[var(--color-ink-soft)] line-clamp-2">
           {product.description}
         </p>
-      </div>
 
-      <div className="flex items-center justify-between gap-2 px-1 pb-1">
-        <PriceTag price={min} prefix="Mulai" size="sm" />
-        {outOfStock ? (
-          <span className="text-xs text-[var(--color-ink-soft)] font-semibold px-3 py-2">
-            Habis
-          </span>
-        ) : (
-          <button
-            type="button"
-            onClick={() => onQuickView(product)}
-            className="inline-flex items-center gap-1 px-3 py-2 rounded-full bg-[var(--color-accent)] text-white text-xs font-semibold hover:bg-[var(--color-accent-deep)] transition shadow-[0_4px_12px_rgba(14,124,134,0.3)]"
-          >
-            <Plus className="w-3.5 h-3.5" />
-            Pesan
-          </button>
-        )}
+        <div className="mt-auto pt-2.5 flex items-end justify-between gap-2">
+          <div className="flex flex-col leading-none min-w-0">
+            <span className="text-[10px] uppercase tracking-wider text-[var(--color-ink-soft)] font-medium">
+              Mulai
+            </span>
+            <span className="font-display font-extrabold text-[var(--color-accent-deep)] tabular-nums text-[14px] sm:text-lg whitespace-nowrap mt-1">
+              {formatRupiah(min)}
+            </span>
+          </div>
+          {!outOfStock && (
+            <button
+              type="button"
+              onClick={() => onQuickView(product)}
+              aria-label={`Pesan ${product.name}`}
+              className="shrink-0 grid place-items-center w-9 h-9 sm:w-auto sm:h-9 sm:px-3.5 rounded-full bg-[var(--color-ink)] text-white text-xs font-semibold hover:bg-[var(--color-accent-deep)] transition shadow-[0_4px_14px_rgba(42,38,34,0.18)]"
+            >
+              <ArrowUpRight className="w-4 h-4 sm:hidden" />
+              <span className="hidden sm:inline-flex items-center gap-1">
+                Pesan <ArrowUpRight className="w-3.5 h-3.5" />
+              </span>
+            </button>
+          )}
+        </div>
       </div>
-    </GlassCard>
+    </article>
   );
 }

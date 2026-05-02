@@ -3,16 +3,25 @@
 import { useRouter } from "next/navigation";
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { toast } from "sonner";
-import { ArrowLeft, Star, Trash2, Upload, X, Loader2 } from "lucide-react";
+import {
+  ArrowLeft,
+  Star,
+  Trash2,
+  Upload,
+  X,
+  Loader2,
+  Plus,
+} from "lucide-react";
 import Link from "next/link";
 import type {
   Brand,
   FishType,
   Product,
   Purpose,
-  Size,
+  Unit,
   Variant,
 } from "@/types/product";
+import { UNITS } from "@/types/product";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { Button } from "@/components/ui/Button";
 import { Input, Textarea } from "@/components/ui/Input";
@@ -32,7 +41,24 @@ const PURPOSE_OPTIONS: { id: Purpose; label: string }[] = [
   { id: "protein", label: "Hi-Protein" },
 ];
 
-const SIZES: Size[] = ["1kg", "5kg", "10kg", "20kg"];
+const UNIT_LABEL: Record<Unit, string> = {
+  kg: "kg",
+  dus: "dus",
+  piece: "piece",
+  sak: "sak",
+};
+
+function formatVariantSize(amount: number, unit: Unit): string {
+  if (unit === "kg") return `${amount}kg`;
+  return `${amount} ${unit}`;
+}
+
+function parseVariantSize(size: string): { amount: number; unit: Unit } {
+  const m = size.trim().toLowerCase().match(/([\d.]+)\s*(kg|dus|piece|sak)?/);
+  const amount = m ? parseFloat(m[1]) || 1 : 1;
+  const unit = (m?.[2] as Unit) || "kg";
+  return { amount, unit };
+}
 
 const BADGES: Product["badge"][] = ["Terlaris", "Premium", "Baru", "Hemat"];
 
@@ -50,12 +76,7 @@ function emptyProduct(): Product {
     fishType: ["koi"],
     purpose: ["daily"],
     description: "",
-    variants: [
-      { size: "1kg", price: 0 },
-      { size: "5kg", price: 0 },
-      { size: "10kg", price: 0 },
-      { size: "20kg", price: 0 },
-    ],
+    variants: [{ size: "1kg", price: 0, amount: 1, unit: "kg" }],
     image: "",
     imageUrl: "",
     featured: false,
@@ -73,18 +94,44 @@ export function ProductForm({ initial, mode }: Props) {
     setP((prev) => ({ ...prev, [key]: value }));
   }
 
-  function setVariantPrice(size: Size, price: number) {
+  function updateVariant(idx: number, patch: Partial<Variant>) {
     setP((prev) => {
-      const found = prev.variants.find((v) => v.size === size);
-      const variants: Variant[] = found
-        ? prev.variants.map((v) => (v.size === size ? { ...v, price } : v))
-        : [...prev.variants, { size, price }];
+      const variants = prev.variants.map((v, i) => {
+        if (i !== idx) return v;
+        const next = { ...v, ...patch };
+        const amount = next.amount ?? parseVariantSize(next.size).amount;
+        const unit = next.unit ?? parseVariantSize(next.size).unit;
+        next.amount = amount;
+        next.unit = unit;
+        next.size = formatVariantSize(amount, unit);
+        return next;
+      });
       return { ...prev, variants };
     });
   }
 
-  function getVariantPrice(size: Size) {
-    return p.variants.find((v) => v.size === size)?.price ?? 0;
+  function addVariant() {
+    setP((prev) => {
+      const last = prev.variants[prev.variants.length - 1];
+      const lastUnit = last?.unit ?? "kg";
+      const newVar: Variant = {
+        size: formatVariantSize(1, lastUnit),
+        price: 0,
+        amount: 1,
+        unit: lastUnit,
+      };
+      return { ...prev, variants: [...prev.variants, newVar] };
+    });
+  }
+
+  function removeVariant(idx: number) {
+    setP((prev) => {
+      if (prev.variants.length <= 1) {
+        toast.error("Minimal 1 ukuran");
+        return prev;
+      }
+      return { ...prev, variants: prev.variants.filter((_, i) => i !== idx) };
+    });
   }
 
   function toggleFish(id: FishType) {
@@ -138,6 +185,11 @@ export function ProductForm({ initial, mode }: Props) {
     }
     if (p.fishType.length === 0) {
       toast.error("Pilih minimal 1 jenis ikan");
+      return;
+    }
+    const validVariants = p.variants.filter((v) => v.price > 0);
+    if (validVariants.length === 0) {
+      toast.error("Isi minimal 1 ukuran dengan harga > 0");
       return;
     }
     setSaving(true);
@@ -406,27 +458,107 @@ export function ProductForm({ initial, mode }: Props) {
         </div>
       </div>
 
-      <GlassCard className="p-6 space-y-3">
-        <h2 className="font-display font-bold">Harga per ukuran (Rupiah)</h2>
-        <p className="text-xs text-[var(--color-ink-soft)]">
-          Isi 0 untuk ukuran yang tidak tersedia.
-        </p>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-          {SIZES.map((s) => (
-            <Input
-              key={s}
-              label={`${s}`}
-              hint={parseInt(s) <= 5 ? "Repack" : "Sak"}
-              type="number"
-              inputMode="numeric"
-              min={0}
-              value={getVariantPrice(s) || ""}
-              placeholder="0"
-              onChange={(e) =>
-                setVariantPrice(s, parseInt(e.target.value || "0", 10))
-              }
-            />
-          ))}
+      <GlassCard className="p-6 space-y-4">
+        <div className="flex items-start justify-between gap-3 flex-wrap">
+          <div>
+            <h2 className="font-display font-bold">Ukuran & harga</h2>
+            <p className="text-xs text-[var(--color-ink-soft)] mt-0.5">
+              Pilih satuan (kg/dus/piece/sak), isi jumlah & harganya. Tambah baris sebanyak yang Anda perlu.
+            </p>
+          </div>
+          <Button
+            type="button"
+            size="sm"
+            variant="secondary"
+            onClick={addVariant}
+            iconLeft={<Plus className="w-4 h-4" />}
+          >
+            Tambah ukuran
+          </Button>
+        </div>
+
+        <div className="space-y-2.5">
+          {p.variants.map((v, idx) => {
+            const parsed = parseVariantSize(v.size);
+            const amount = v.amount ?? parsed.amount;
+            const unit = v.unit ?? parsed.unit;
+            return (
+              <div
+                key={idx}
+                className="grid grid-cols-12 gap-2 items-end glass rounded-2xl p-3"
+              >
+                <div className="col-span-4 sm:col-span-3">
+                  <label className="block text-[11px] font-medium text-[var(--color-ink-soft)] mb-1">
+                    Jumlah
+                  </label>
+                  <input
+                    type="number"
+                    inputMode="decimal"
+                    min={0}
+                    step="0.1"
+                    value={amount || ""}
+                    placeholder="1"
+                    onChange={(e) =>
+                      updateVariant(idx, {
+                        amount: parseFloat(e.target.value || "0") || 0,
+                      })
+                    }
+                    className="w-full bg-white/70 border border-white/80 rounded-xl px-3 py-2.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]/40"
+                  />
+                </div>
+                <div className="col-span-4 sm:col-span-3">
+                  <label className="block text-[11px] font-medium text-[var(--color-ink-soft)] mb-1">
+                    Satuan
+                  </label>
+                  <select
+                    value={unit}
+                    onChange={(e) =>
+                      updateVariant(idx, { unit: e.target.value as Unit })
+                    }
+                    className="w-full bg-white/70 border border-white/80 rounded-xl px-3 py-2.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]/40"
+                  >
+                    {UNITS.map((u) => (
+                      <option key={u} value={u}>
+                        {UNIT_LABEL[u]}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="col-span-10 sm:col-span-5">
+                  <label className="block text-[11px] font-medium text-[var(--color-ink-soft)] mb-1">
+                    Harga (Rp)
+                  </label>
+                  <input
+                    type="number"
+                    inputMode="numeric"
+                    min={0}
+                    value={v.price || ""}
+                    placeholder="0"
+                    onChange={(e) =>
+                      updateVariant(idx, {
+                        price: parseInt(e.target.value || "0", 10),
+                      })
+                    }
+                    className="w-full bg-white/70 border border-white/80 rounded-xl px-3 py-2.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]/40"
+                  />
+                </div>
+                <div className="col-span-2 sm:col-span-1 flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => removeVariant(idx)}
+                    aria-label={`Hapus ukuran ${v.size}`}
+                    disabled={p.variants.length <= 1}
+                    className="w-10 h-10 grid place-items-center rounded-xl text-[var(--color-ink-soft)] hover:text-[#9c322a] hover:bg-[#FAE0DD] disabled:opacity-40 disabled:cursor-not-allowed"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+                <p className="col-span-12 text-[11px] text-[var(--color-ink-soft)]">
+                  Akan tampil sebagai: <strong>{v.size}</strong>
+                </p>
+              </div>
+            );
+          })}
         </div>
       </GlassCard>
     </form>

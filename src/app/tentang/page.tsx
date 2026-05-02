@@ -1,4 +1,4 @@
-import { MapPin, Phone, Mail, Clock, MessageCircle, Award, Users, Truck, Globe } from "lucide-react";
+import { MapPin, Phone, Clock, MessageCircle, Award, Users, Truck, Globe } from "lucide-react";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { LinkButton } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -158,7 +158,7 @@ export default function TentangPage() {
                     Jam Operasional
                   </p>
                   <p className="font-semibold">
-                    Senin–Sabtu, 08.00–17.00 WIB
+                    Senin–Sabtu, 08.00–16.00 WIB
                   </p>
                 </div>
               </li>
@@ -170,21 +170,13 @@ export default function TentangPage() {
                   <p className="text-[var(--color-ink-soft)] text-xs">
                     Alamat Toko
                   </p>
-                  <p className="font-semibold">
-                    Bharata Trisakti — Indonesia
+                  <p className="font-semibold leading-snug">
+                    Jl. Raya Grajagan, Krajan, Purwoharjo, Kec. Purwoharjo,
+                    Kabupaten Banyuwangi, Jawa Timur 68483
                   </p>
-                  <p className="text-xs text-[var(--color-ink-soft)] mt-0.5">
+                  <p className="text-xs text-[var(--color-ink-soft)] mt-1">
                     Pengiriman seluruh Indonesia via JNE / POS / J&amp;T Cargo
                   </p>
-                </div>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="grid place-items-center w-9 h-9 rounded-xl bg-[var(--color-accent-soft)]/60 text-[var(--color-accent-deep)] shrink-0">
-                  <Mail className="w-4 h-4" />
-                </span>
-                <div>
-                  <p className="text-[var(--color-ink-soft)] text-xs">Email</p>
-                  <p className="font-semibold">halo@bharatatrisakti.id</p>
                 </div>
               </li>
             </ul>
@@ -205,8 +197,8 @@ export default function TentangPage() {
           <GlassCard className="lg:col-span-7 p-2 overflow-hidden">
             <div className="aspect-[4/3] md:aspect-auto md:h-full w-full rounded-2xl overflow-hidden bg-[var(--color-accent-soft)]/30">
               <iframe
-                title="Lokasi Bharata Trisakti"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126922.94259544027!2d106.7588490849609!3d-6.229385099999988!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f3e945e34b9d%3A0x5371bf0fdad786a2!2sJakarta!5e0!3m2!1sen!2sid!4v1700000000000"
+                title="Lokasi Bharata Trisakti — Purwoharjo, Banyuwangi"
+                src="https://www.google.com/maps?q=Jl.%20Raya%20Grajagan%2C%20Krajan%2C%20Purwoharjo%2C%20Banyuwangi%2C%20Jawa%20Timur%2068483&output=embed"
                 width="100%"
                 height="100%"
                 style={{ border: 0, minHeight: 360 }}

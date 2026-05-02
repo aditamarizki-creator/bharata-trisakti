@@ -80,22 +80,14 @@ export function SettingsForm({ initial }: Props) {
           label="Alamat / lokasi"
           value={s.storeAddress}
           onChange={(e) => set("storeAddress", e.target.value)}
-          placeholder="contoh: Jl. Mawar No. 12, Surabaya"
+          placeholder="contoh: Jl. Raya Grajagan, Krajan, Purwoharjo, Banyuwangi"
         />
-        <div className="grid sm:grid-cols-2 gap-4">
-          <Input
-            label="Email kontak"
-            type="email"
-            value={s.storeEmail}
-            onChange={(e) => set("storeEmail", e.target.value)}
-          />
-          <Input
-            label="Jam operasional"
-            value={s.storeHours}
-            onChange={(e) => set("storeHours", e.target.value)}
-            placeholder="contoh: Senin–Sabtu, 08.00–17.00 WIB"
-          />
-        </div>
+        <Input
+          label="Jam operasional"
+          value={s.storeHours}
+          onChange={(e) => set("storeHours", e.target.value)}
+          placeholder="contoh: Senin–Sabtu, 08.00–16.00 WIB"
+        />
       </GlassCard>
 
       <div className="sticky bottom-4">

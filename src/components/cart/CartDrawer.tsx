@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ShoppingBag, Trash2, X, MessageCircle } from "lucide-react";
@@ -157,22 +156,20 @@ export function CartDrawer() {
                   </span>
                 </div>
                 <p className="text-[11px] text-[var(--color-ink-soft)] -mt-1">
-                  Ongkir dihitung admin sesuai kota tujuan setelah Anda kirim
-                  pesanan.
+                  Tinggal kirim ke admin via WhatsApp — ongkir & ketersediaan
+                  stok dikonfirmasi langsung.
                 </p>
-                <Link href="/checkout" onClick={closeCart} className="block">
-                  <Button size="lg" className="w-full">
-                    Lanjut Pesan →
-                  </Button>
-                </Link>
                 <Button
                   variant="whatsapp"
-                  size="md"
+                  size="lg"
                   className="w-full"
-                  onClick={() => openWhatsApp(buildCartInquiry(items), waNumber)}
+                  onClick={() => {
+                    openWhatsApp(buildCartInquiry(items), waNumber);
+                    closeCart();
+                  }}
                   iconLeft={<MessageCircle className="w-4 h-4" />}
                 >
-                  Pesan Langsung via WhatsApp
+                  Pesan via WhatsApp
                 </Button>
               </footer>
             )}

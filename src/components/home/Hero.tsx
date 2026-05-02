@@ -1,13 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { Star, Truck, ShieldCheck, ArrowRight } from "lucide-react";
+import { Star, Truck, ArrowRight } from "lucide-react";
 import { LinkButton } from "@/components/ui/Button";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { Badge } from "@/components/ui/Badge";
 import { buildGeneralInquiry, waUrl } from "@/lib/wa";
 import { useSettings } from "@/lib/settings-context";
-import { HeroIllustration } from "./HeroIllustration";
+import { HeroCarousel } from "./HeroCarousel";
 
 export function Hero() {
   const { waNumber } = useSettings();
@@ -27,8 +27,7 @@ export function Hero() {
           </h1>
           <p className="mt-4 sm:mt-5 text-[15px] sm:text-lg text-[var(--color-ink-soft)] max-w-xl text-balance leading-relaxed">
             Brand resmi: Hiro, Sankoi, STP KAE, Kohaku, PIP, Matahari Sakti, dan
-            CP Petindo. Original 100%, harga bersaing, kirim ke seluruh
-            Indonesia.
+            CP Petindo. Harga bersaing, kirim ke seluruh Indonesia.
           </p>
 
           <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-2.5 sm:gap-3">
@@ -62,16 +61,12 @@ export function Hero() {
               <Truck className="w-4 h-4 text-[var(--color-accent)]" />
               JNE · POS · J&amp;T Cargo
             </span>
-            <span className="inline-flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-[var(--color-success)]" />
-              Original 100%
-            </span>
           </div>
         </div>
 
         <div className="lg:col-span-5 relative order-1 lg:order-2">
           <GlassCard className="relative aspect-[5/4] sm:aspect-[4/5] overflow-hidden p-0">
-            <HeroIllustration />
+            <HeroCarousel />
           </GlassCard>
 
           {/* floating stat cards (desktop only) */}

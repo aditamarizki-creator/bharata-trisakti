@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MapPin, Phone, Mail, Clock, Truck } from "lucide-react";
+import { MapPin, Phone, Clock, Truck } from "lucide-react";
 import { Logo } from "./Logo";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { Badge } from "@/components/ui/Badge";
@@ -47,9 +47,14 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/checkout" className="hover:text-[var(--color-accent-deep)]">
-                  Pesan Sekarang
-                </Link>
+                <a
+                  href="https://wa.me/6285702403940"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-[var(--color-accent-deep)]"
+                >
+                  Pesan via WhatsApp
+                </a>
               </li>
             </ul>
           </div>
@@ -62,8 +67,8 @@ export function Footer() {
               <li className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 mt-0.5 text-[var(--color-accent)] shrink-0" />
                 <span>
-                  Alamat toko Bharata Trisakti — siap dikirim ke seluruh
-                  Indonesia
+                  Jl. Raya Grajagan, Krajan, Purwoharjo, Kec. Purwoharjo,
+                  Kabupaten Banyuwangi, Jawa Timur 68483
                 </span>
               </li>
               <li className="flex items-start gap-2.5">
@@ -78,12 +83,8 @@ export function Footer() {
                 </a>
               </li>
               <li className="flex items-start gap-2.5">
-                <Mail className="w-4 h-4 mt-0.5 text-[var(--color-accent)] shrink-0" />
-                <span>halo@bharatatrisakti.id</span>
-              </li>
-              <li className="flex items-start gap-2.5">
                 <Clock className="w-4 h-4 mt-0.5 text-[var(--color-accent)] shrink-0" />
-                <span>Senin–Sabtu, 08.00–17.00 WIB</span>
+                <span>Senin–Sabtu, 08.00–16.00 WIB</span>
               </li>
               <li className="flex items-start gap-2.5">
                 <Truck className="w-4 h-4 mt-0.5 text-[var(--color-accent)] shrink-0" />
@@ -95,7 +96,7 @@ export function Footer() {
 
         <div className="border-t border-white/60 mt-10 pt-6 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-[var(--color-ink-soft)]">
           <p>© {new Date().getFullYear()} Bharata Trisakti. All rights reserved.</p>
-          <p>Pakan ikan koi & hias · Original 100% · Kirim seluruh Indonesia</p>
+          <p>Pakan ikan koi & hias · Kirim seluruh Indonesia</p>
         </div>
       </GlassCard>
     </footer>

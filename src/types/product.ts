@@ -11,11 +11,18 @@ export type FishType = "koi" | "hias";
 
 export type Purpose = "color" | "growth" | "daily" | "protein";
 
-export type Size = "1kg" | "5kg" | "10kg" | "20kg";
+export type Unit = "kg" | "dus" | "piece" | "sak";
+export const UNITS: Unit[] = ["kg", "dus", "piece", "sak"];
+
+// Label varian, contoh: "1kg", "5kg", "1 dus", "1 piece", "1 sak".
+// Disimpan sebagai string bebas supaya admin fleksibel mengisi ukuran apapun.
+export type Size = string;
 
 export type Variant = {
   size: Size;
   price: number;
+  unit?: Unit;
+  amount?: number;
 };
 
 export type Product = {
@@ -46,17 +53,6 @@ export type CartItem = {
   image: string;
 };
 
-export type OrderForm = {
-  nama: string;
-  hp: string;
-  email: string;
-  alamat: string;
-  kota: string;
-  kodepos: string;
-  kurir: "JNE Reguler" | "POS Indonesia" | "J&T Cargo";
-  catatan: string;
-};
-
 export type Settings = {
   waNumber: string; // ex: "6285702403940" (no +)
   storeName: string;
@@ -73,9 +69,10 @@ export type Settings = {
 export const DEFAULT_SETTINGS: Settings = {
   waNumber: "6285702403940",
   storeName: "Bharata Trisakti",
-  storeAddress: "Indonesia (kirim ke seluruh Indonesia)",
-  storeEmail: "halo@bharatatrisakti.id",
-  storeHours: "Senin–Sabtu, 08.00–17.00 WIB",
+  storeAddress:
+    "Jl. Raya Grajagan, Krajan, Purwoharjo, Kec. Purwoharjo, Kabupaten Banyuwangi, Jawa Timur 68483",
+  storeEmail: "",
+  storeHours: "Senin–Sabtu, 08.00–16.00 WIB",
   promoBanner: {
     enabled: false,
     text: "🎉 Promo terbatas — chat WA untuk info lengkap",

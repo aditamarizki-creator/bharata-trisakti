@@ -20,6 +20,20 @@ export function KatalogClient({ products }: Props) {
   const [active, setActive] = useState<Product | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  const availableSizes = useMemo(() => {
+    const set = new Set<string>();
+    products.forEach((p) =>
+      p.variants.forEach((v) => {
+        if (v.price > 0) set.add(v.size);
+      }),
+    );
+    return Array.from(set).sort((a, b) => {
+      const na = parseFloat(a) || 0;
+      const nb = parseFloat(b) || 0;
+      return na - nb;
+    });
+  }, [products]);
+
   const filtered = useMemo(() => {
     return products.filter((p) => {
       if (filters.q) {
@@ -71,6 +85,7 @@ export function KatalogClient({ products }: Props) {
               filters={filters}
               onChange={setFilters}
               total={filtered.length}
+              availableSizes={availableSizes}
             />
           </aside>
 
@@ -143,6 +158,7 @@ export function KatalogClient({ products }: Props) {
               filters={filters}
               onChange={setFilters}
               total={filtered.length}
+              availableSizes={availableSizes}
             />
             <Button
               size="lg"
